@@ -3,9 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#b3202a">
   <title>REDGEOD | Réseau des étudiant·es et diplômé·es de géographie du développement</title>
   <meta name="description" content="REDGEOD, le réseau des étudiant·es et diplômé·es du Master Géographie DynSud : guides de terrain, réseau alumni et événements.">
+  <link rel="icon" href="images/logo.png">
   <link rel="stylesheet" href="style.css">
+  <noscript><style>.reveal{opacity:1;transform:none}</style></noscript>
 </head>
 <body>
 
@@ -27,12 +30,24 @@
   <main>
 
     <section id="accueil">
-      <h2>Réseau des étudiant·es et diplômé·es de géographie du développement</h2>
-      <p>Échanger, relier, valoriser les parcours.</p>
-      <a href="#rejoindre">Rejoindre l'association</a>
+      <div class="hero-anim joue" id="hero-anim">
+        <div class="sigle" role="img" aria-label="REDGEOD : Réseau des étudiant·es et diplômé·es de géographie du développement">
+          <div class="lettre" style="--i:0"><span class="gl">R</span><span class="mot">Réseau</span></div>
+          <div class="lettre" style="--i:1"><span class="gl">E</span><span class="mot">Étudiant·es</span></div>
+          <div class="lettre" style="--i:2"><span class="gl">D</span><span class="mot">Diplômé·es</span></div>
+          <div class="lettre" style="--i:3"><span class="gl">GEO</span><span class="mot">Géographie</span></div>
+          <div class="lettre" style="--i:4"><span class="gl">D</span><span class="mot">Développement</span></div>
+        </div>
+        <p class="definition">Réseau des étudiant·es et diplômé·es de géographie du développement</p>
+        <p class="devise">Échanger, relier, valoriser les parcours.</p>
+        <div class="bouton-zone">
+          <a class="bouton" href="#rejoindre">Rejoindre l'association</a>
+        </div>
+      </div>
+      <button type="button" class="rejouer" id="rejouer">↻ Rejouer l'animation</button>
     </section>
 
-    <section id="apropos">
+    <section id="apropos" class="reveal">
       <h2>À propos</h2>
       <p>REDGEOD est l'association des étudiant·es et diplômé·es du Master Géographie, parcours Territoires et dynamiques du Sud global (DynSud), porté par l'Université Paris 1 Panthéon-Sorbonne, l'Université Paris Cité et AgroParisTech.</p>
       <h3>Nos missions</h3>
@@ -49,7 +64,7 @@
       </ul>
     </section>
 
-    <section id="bureau">
+    <section id="bureau" class="reveal">
       <h2>Le bureau</h2>
       <div class="equipe">
         <article class="membre">
@@ -73,9 +88,11 @@
           <p>Secrétaire</p>
         </article>
       </div>
+      <!-- Pour une photo : remplace la ligne <div class="photo">XX</div> par
+           <img class="photo" src="images/prenom.jpg" alt="Prénom Nom"> -->
     </section>
 
-    <section id="activites">
+    <section id="activites" class="reveal">
       <h2>Nos activités</h2>
       <article>
         <h3>Accompagnement des étudiant·es</h3>
@@ -91,7 +108,7 @@
       </article>
     </section>
 
-    <section id="actualites">
+    <section id="actualites" class="reveal">
       <h2>Actualités et événements</h2>
       <h3>À venir</h3>
       <article><h4>Secret Santa 2026</h4></article>
@@ -108,7 +125,71 @@
       </ul>
     </section>
 
-    <section id="rejoindre">
+    <!-- Galerie : retire les balises de commentaire quand tu as les photos
+    <section id="galerie" class="reveal">
+      <h2>En images</h2>
+      <div class="galerie">
+        <img src="images/photo1.jpg" alt="Description de la photo 1">
+        <img src="images/photo2.jpg" alt="Description de la photo 2">
+      </div>
+    </section>
+    -->
+
+    <section id="rejoindre" class="reveal">
       <h2>Nous rejoindre</h2>
       <p>Toute personne souhaitant soutenir l'association peut adhérer. L'adhésion coûte 5 € par an, et les dons sont possibles.</p>
-      <a href="https://docs.google.com/forms/d/e/1FAIpQLScBc5UVbf5OYpmq0erk
+      <a class="bouton" href="https://docs.google.com/forms/d/e/1FAIpQLScBc5UVbf5OYpmq0erkenN1_aIsKTIpWDNAwEpCBKiW6ZhHAw/viewform" target="_blank" rel="noopener">Remplir le formulaire d'adhésion</a>
+    </section>
+
+    <section id="contact" class="reveal">
+      <h2>Contact</h2>
+      <form action="https://formspree.io/f/xppqvkgv" method="POST">
+        <input type="hidden" name="_subject" value="Nouveau message depuis le site REDGEOD">
+
+        <label for="nom">Nom</label>
+        <input type="text" id="nom" name="nom" required>
+
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="message">Votre question</label>
+        <textarea id="message" name="message" rows="5" required></textarea>
+
+        <button type="submit" class="bouton">Envoyer</button>
+      </form>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>Contact : <a href="mailto:redgeod1@gmail.com">redgeod1@gmail.com</a></p>
+  </footer>
+
+  <script>
+    // Apparition des sections au défilement
+    const elements = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window) {
+      const obs = new IntersectionObserver((entrees) => {
+        entrees.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add('visible');
+            obs.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      elements.forEach((el) => obs.observe(el));
+    } else {
+      elements.forEach((el) => el.classList.add('visible'));
+    }
+
+    // Rejouer l'animation du nom
+    const hero = document.getElementById('hero-anim');
+    document.getElementById('rejouer').addEventListener('click', () => {
+      hero.classList.remove('joue');
+      void hero.offsetWidth;
+      hero.classList.add('joue');
+    });
+  </script>
+
+</body>
+</html>
