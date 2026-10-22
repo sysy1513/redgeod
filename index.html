@@ -22,6 +22,7 @@
       <a href="#bureau">Bureau</a>
       <a href="#activites">Activités</a>
       <a href="#actualites">Actualités</a>
+      <a href="#galerie">Galerie</a>
       <a href="#rejoindre">Rejoindre</a>
       <a href="#contact">Contact</a>
     </nav>
@@ -88,8 +89,6 @@
           <p>Secrétaire</p>
         </article>
       </div>
-      <!-- Pour une photo : remplace la ligne <div class="photo">XX</div> par
-           <img class="photo" src="images/prenom.jpg" alt="Prénom Nom"> -->
     </section>
 
     <section id="activites" class="reveal">
@@ -125,15 +124,52 @@
       </ul>
     </section>
 
-    <!-- Galerie : retire les balises de commentaire quand tu as les photos
     <section id="galerie" class="reveal">
       <h2>En images</h2>
+      <p class="galerie-intro">La vie de l'association en quelques moments. Clique sur une photo pour l'agrandir.</p>
       <div class="galerie">
-        <img src="images/photo1.jpg" alt="Description de la photo 1">
-        <img src="images/photo2.jpg" alt="Description de la photo 2">
+        <a class="vignette" href="images/diplomes1.png" data-legende="Cérémonie de remise des diplômes">
+          <img src="images/diplomes1.png" alt="Cérémonie de remise des diplômes" loading="lazy">
+          <span>Remise des diplômes</span>
+        </a>
+        <a class="vignette" href="images/soiree1.png" data-legende="Soirée de l'association">
+          <img src="images/soiree1.png" alt="Soirée de l'association" loading="lazy">
+          <span>Soirée</span>
+        </a>
+        <a class="vignette" href="images/presentation-master.png" data-legende="Présentation du Master">
+          <img src="images/presentation-master.png" alt="Présentation du Master" loading="lazy">
+          <span>Présentation du Master</span>
+        </a>
+        <a class="vignette" href="images/visite-labo.png" data-legende="Visite d'un laboratoire de recherche">
+          <img src="images/visite-labo.png" alt="Visite d'un laboratoire de recherche" loading="lazy">
+          <span>Visite de laboratoire</span>
+        </a>
+        <a class="vignette" href="images/apero-ateliers.png" data-legende="Apéro de fin d'ateliers">
+          <img src="images/apero-ateliers.png" alt="Apéro de fin d'ateliers" loading="lazy">
+          <span>Apéro de fin d'ateliers</span>
+        </a>
+        <a class="vignette" href="images/diplomes2.png" data-legende="Remise des diplômes : les diplômé·es">
+          <img src="images/diplomes2.png" alt="Remise des diplômes : les diplômé·es" loading="lazy">
+          <span>Les diplômé·es</span>
+        </a>
+        <a class="vignette" href="images/soiree-prof.png" data-legende="Soirée avec l'équipe enseignante">
+          <img src="images/soiree-prof.png" alt="Soirée avec l'équipe enseignante" loading="lazy">
+          <span>Soirée avec l'équipe enseignante</span>
+        </a>
+        <a class="vignette" href="images/secret-santa1.png" data-legende="Secret Santa">
+          <img src="images/secret-santa1.png" alt="Secret Santa" loading="lazy">
+          <span>Secret Santa</span>
+        </a>
+        <a class="vignette" href="images/soiree2.png" data-legende="Soirée entre étudiant·es">
+          <img src="images/soiree2.png" alt="Soirée entre étudiant·es" loading="lazy">
+          <span>Soirée entre étudiant·es</span>
+        </a>
+        <a class="vignette" href="images/secret-santa2.png" data-legende="Secret Santa : échange de cadeaux">
+          <img src="images/secret-santa2.png" alt="Secret Santa : échange de cadeaux" loading="lazy">
+          <span>Échange de cadeaux</span>
+        </a>
       </div>
     </section>
-    -->
 
     <section id="rejoindre" class="reveal">
       <h2>Nous rejoindre</h2>
@@ -165,6 +201,17 @@
     <p>Contact : <a href="mailto:redgeod1@gmail.com">redgeod1@gmail.com</a></p>
   </footer>
 
+  <!-- Visionneuse de photos -->
+  <div class="lightbox" id="lightbox" hidden>
+    <button type="button" class="lb-bouton lb-fermer" id="lb-fermer" aria-label="Fermer">×</button>
+    <button type="button" class="lb-bouton lb-prec" id="lb-prec" aria-label="Photo précédente">‹</button>
+    <figure>
+      <img id="lb-img" src="" alt="">
+      <figcaption id="lb-legende"></figcaption>
+    </figure>
+    <button type="button" class="lb-bouton lb-suiv" id="lb-suiv" aria-label="Photo suivante">›</button>
+  </div>
+
   <script>
     // Apparition des sections au défilement
     const elements = document.querySelectorAll('.reveal');
@@ -176,7 +223,7 @@
             obs.unobserve(e.target);
           }
         });
-      }, { threshold: 0.1 });
+      }, { threshold: 0.05 });
       elements.forEach((el) => obs.observe(el));
     } else {
       elements.forEach((el) => el.classList.add('visible'));
@@ -188,6 +235,55 @@
       hero.classList.remove('joue');
       void hero.offsetWidth;
       hero.classList.add('joue');
+    });
+
+    // Visionneuse de photos
+    const vignettes = Array.from(document.querySelectorAll('.vignette'));
+    const box = document.getElementById('lightbox');
+    const boxImg = document.getElementById('lb-img');
+    const boxLeg = document.getElementById('lb-legende');
+    let courant = 0;
+
+    function afficher(i) {
+      courant = (i + vignettes.length) % vignettes.length;
+      const v = vignettes[courant];
+      boxImg.src = v.getAttribute('href');
+      boxImg.alt = v.dataset.legende || '';
+      boxLeg.textContent = v.dataset.legende || '';
+    }
+
+    function ouvrir(i) {
+      afficher(i);
+      box.hidden = false;
+      document.body.style.overflow = 'hidden';
+    }
+
+    function fermer() {
+      box.hidden = true;
+      boxImg.src = '';
+      document.body.style.overflow = '';
+    }
+
+    vignettes.forEach((v, i) => {
+      v.addEventListener('click', (e) => {
+        e.preventDefault();
+        ouvrir(i);
+      });
+    });
+
+    document.getElementById('lb-fermer').addEventListener('click', fermer);
+    document.getElementById('lb-prec').addEventListener('click', () => afficher(courant - 1));
+    document.getElementById('lb-suiv').addEventListener('click', () => afficher(courant + 1));
+
+    box.addEventListener('click', (e) => {
+      if (e.target === box) fermer();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (box.hidden) return;
+      if (e.key === 'Escape') fermer();
+      if (e.key === 'ArrowLeft') afficher(courant - 1);
+      if (e.key === 'ArrowRight') afficher(courant + 1);
     });
   </script>
 
